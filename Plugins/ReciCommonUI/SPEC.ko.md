@@ -170,4 +170,3 @@ agent를 위한 문서입니다. 규칙과 그 이유는 참고 문서 [DESIGN.m
   - 모든 control에 direction key로 닿습니다.
   - hint가 device에 따라 바뀌고 터치에서 숨습니다.
   - Back이 동작합니다(PIE에서는 Backspace).
-- **Test:** automation test 이름은 `ReciCommonUI.*`입니다. 저장소 README를 참고합니다.

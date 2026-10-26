@@ -90,19 +90,6 @@ Project Settings > Plugins > Reci Common UI에는 선택 설정 Navigation(Tab N
 - **Modal**: Composer에 요청해 `ModalStack`에 Is Modal dialog를 띄우는 버튼. dialog는 자기 Back handler입니다.
 - **Two-Level**: child carousel을 가진 카테고리. On Confirmed가 그 쌍을 보여 줍니다.
 
-## 테스트
-
-automation test 이름은 `ReciCommonUI.*`입니다.
-
-- 에디터: Tools > Session Frontend > **Automation**에서 filter `ReciCommonUI`, test를 체크하고 **Start Tests**를 누릅니다.
-- command line: 에디터를 닫고 프로젝트를 build한 뒤(target `ReciCommonUIDemoEditor`) 실행합니다.
-
-```bash
-"C:/Program Files/Epic Games/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe" ReciCommonUIDemo.uproject -ExecCmds="Automation RunTests ReciCommonUI; Quit" -unattended -nopause -nosplash -NullRHI -TestExit="Automation Test Queue Empty" -log=ReciTests.log
-```
-
-log는 `Saved/Logs/ReciTests.log`에 남습니다.
-
 ## 문서
 
 - [가이드](Docs/Guide.ko.md): 빈 C++ 프로젝트에서 시작해 Unreal Editor에서 menu screen을 단계별로 만듭니다. input,

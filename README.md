@@ -91,20 +91,6 @@ game start in `/ReciCommonUI/Demo/DemoMap`; press Play. The demo assets are in `
   handler.
 - **Two-Level**: categories with a child carousel each; On Confirmed shows the pair.
 
-## Tests
-
-The automation tests are named `ReciCommonUI.*`.
-
-- In the editor: Tools > Session Frontend > **Automation**, filter `ReciCommonUI`, tick the tests and press **Start
-  Tests**.
-- From the command line, with the editor closed and the project built (target `ReciCommonUIDemoEditor`):
-
-```bash
-"C:/Program Files/Epic Games/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe" ReciCommonUIDemo.uproject -ExecCmds="Automation RunTests ReciCommonUI; Quit" -unattended -nopause -nosplash -NullRHI -TestExit="Automation Test Queue Empty" -log=ReciTests.log
-```
-
-The log is written to `Saved/Logs/ReciTests.log`.
-
 ## Docs
 
 - [Guide](Docs/Guide.md): starting from an empty C++ project, build a menu screen step by step in the Unreal Editor:

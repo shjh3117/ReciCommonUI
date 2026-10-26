@@ -164,4 +164,3 @@ Use this, for example, for a key that drives a list while focus is elsewhere, or
   - every control is reachable by direction keys;
   - hints switch with the device and hide on touch;
   - Back works (Backspace in PIE).
-- **Tests:** automation tests are `ReciCommonUI.*`; see the repository README.
