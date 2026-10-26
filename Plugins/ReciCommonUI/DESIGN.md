@@ -572,6 +572,13 @@ compiler가 검사하는 binding, validity query, 또는 `LogReciCommonUI`에 �
 
 각 deviation은 고쳐야 하며, 고치면 이 목록에서 뺀다.
 
+**Focus (원칙 1)**
+- screen의 첫 focus를 CommonUI의 Desired Focus Widget으로 정할 수 없다. focus를 그대로 두려는 `Keep Focus Or Target`이
+  None을 반환하면 CommonUI가 Desired Focus Widget에 focus하므로, screen은 Desired Focus Widget을 비우고 Get Desired
+  Focus Target을 override해야 한다. 또 None일 때 focus를 그대로 두는 CommonUI 경로는 CommonUI가 임시 지원이라고
+  적은 것이다. 바꿀 방향: screen이 Desired Focus Widget(예: Reci List)으로 첫 focus를 정하고, input method가 바뀔 때
+  screen 안의 focus를 유지하는 일은 플러그인이 맡아 override 없이 동작하게 한다.
+
 **Public surface (원칙 15)**
 - coordinator의 pointer와 wheel routing(hit-path target, hover isolation, click을 취소하는 drag나
   capture loss, control 위의 wheel)에는 automation test가 없다. Slate가 harness의 virtual window를

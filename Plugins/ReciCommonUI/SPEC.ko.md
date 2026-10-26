@@ -157,7 +157,9 @@ agent를 위한 문서입니다. 규칙과 그 이유는 참고 문서 [DESIGN.m
   - Hide When Unmapped를 끄지 않습니다.
   - button의 key를 Hint Input Action과 screen branch로 만들지 않습니다. Triggering Enhanced Input Action을
     씁니다.
-- **Focus:** Desired Focus Widget을 설정하지 않습니다.
+- **Focus:** Screen과 dialog에서는 Class Defaults > Interaction > **Desired Focus Widget**을 비워 둡니다. Keep Focus
+  Or Target은 focus를 그대로 두려고 None을 반환하는데, CommonUI는 None이면 Desired Focus Widget에 focus합니다.
+  Desired Focus Widget을 쓸 수 있도록 바꿀 예정입니다([DESIGN.md, Known deviations](DESIGN.md#known-deviations)).
 - **긴 list:** Reci List는 모든 entry를 살려 둡니다. 긴 list는 entry 안에 control이 없는 List View를 씁니다.
 
 ## 확인

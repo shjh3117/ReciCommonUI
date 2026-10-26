@@ -151,7 +151,9 @@ Use this, for example, for a key that drives a list while focus is elsewhere, or
   - Do not write key names in text. Every key comes from an input action through Reci Mapped Key Text.
   - Do not turn off Hide When Unmapped.
   - Do not build a button's key from Hint Input Action plus a screen branch. Use Triggering Enhanced Input Action.
-- **Focus:** do not set Desired Focus Widget.
+- **Focus:** on Screens and dialogs, leave Class Defaults > Interaction > **Desired Focus Widget** empty. Keep Focus Or
+  Target returns None to keep focus where it is, and CommonUI then focuses Desired Focus Widget instead. This is to
+  change so that Desired Focus Widget can be used ([DESIGN.md, Known deviations](DESIGN.md#known-deviations)).
 - **Long lists:** Reci List keeps every entry alive. For long lists use a List View without controls inside entries.
 
 ## Verify
