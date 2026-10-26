@@ -11,8 +11,8 @@ Reci Common UI는 CommonUI를 기반으로 입력을 통합하고 게임 메뉴 
 - **Composer → Screen 구조**: map마다 Composer 하나가 Stack과 UI input mapping을 맡고, Screen은 자기 화면의 표시,
   입력, 초기 focus만 맡습니다. 참조는 아래로만 향하고, 위로는 dispatcher로 요청합니다. 데모가 이 구조로 만들어져
   있습니다([SPEC.ko.md](Plugins/ReciCommonUI/SPEC.ko.md#구조)).
-- **list focus 해결**: CommonUI의 ListView 기반 list는 entry widget을 재활용하므로 entry 안의 버튼, slider,
-  dropdown이 focus를 받지 못합니다. Reci list는 item마다 살아 있는 widget을 두어 이를 해결하고, list를 다시 채워도
+- **focus를 받는 list entry**: CommonUI의 ListView 기반 list는 entry widget을 재활용하므로 entry 안의 버튼, slider,
+  dropdown이 focus를 받지 못합니다. Reci list는 item마다 살아 있는 widget을 두어 entry 안의 control도 focus를 받게 하고, list를 다시 채워도
   focus를 잃지 않습니다.
 - **데모 스타일**: text, border, button style과 widget이 데모에 들어 있어 시작점으로 쓸 수 있습니다. 테마(색, 간격
   등)는 Material 3을 따랐습니다.
@@ -25,7 +25,7 @@ flowchart LR
   subgraph Reci["Reci Common UI"]
     direction TB
     Hints["Key hint"]
-    Lists["list focus 해결"]
+    Lists["focus를 받는 list entry"]
     Input["입력 통합"]
   end
   Reci --> Menus["게임 메뉴"]

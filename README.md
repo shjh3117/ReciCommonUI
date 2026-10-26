@@ -11,7 +11,7 @@ Reci Common UI is an Unreal Engine plugin built on CommonUI that unifies input a
 - **Composer → Screen structure**: one Composer per map owns the Stack and the UI input mapping; each Screen owns only
   its own display, input and initial focus. References point down only, and requests go up through dispatchers. The
   demo is built this way ([SPEC.md](Plugins/ReciCommonUI/SPEC.md#structure)).
-- **List focus, fixed**: CommonUI's ListView-based lists recycle entry widgets, so buttons, sliders and dropdowns inside
+- **Focusable list entries**: CommonUI's ListView-based lists recycle entry widgets, so buttons, sliders and dropdowns inside
   an entry cannot take focus. Reci lists keep a live widget for every item, and keep focus when the list is refilled.
 - **Demo styles**: text, border and button styles and widgets come with the demo as a starting point. Their theme,
   colours and spacing included, follows Material 3.
@@ -24,7 +24,7 @@ flowchart LR
   subgraph Reci["Reci Common UI"]
     direction TB
     Hints["Key hints"]
-    Lists["List focus, fixed"]
+    Lists["Focusable list entries"]
     Input["Unified input"]
   end
   Reci --> Menus["Your menus"]
