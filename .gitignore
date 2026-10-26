@@ -1,0 +1,28 @@
+# Unreal generated files
+/Binaries/
+/DerivedDataCache/
+/Intermediate/
+/Saved/
+/Build/
+
+# Plugin build products
+/Plugins/*/Binaries/
+/Plugins/*/Intermediate/
+/Plugins/*/Saved/
+
+# Local IDE files
+/.vs/
+/.vscode/
+/.idea/
+*.sln
+*.suo
+*.user
+*.opensdf
+*.sdf
+*.VC.db
+*.VC.opendb
+
+# Logs and crash dumps
+*.log
+*.dmp
+*.crash
