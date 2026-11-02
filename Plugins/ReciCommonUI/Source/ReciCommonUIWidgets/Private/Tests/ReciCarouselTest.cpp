@@ -383,6 +383,87 @@ bool FReciListLoopingEntriesTest::RunTest(const FString& Parameters)
 	return true;
 }
 
+// Set Looping Entries on a list that has items presents them again: off removes the copies, so each item shows once and the
+// carousel centres the first and last item, with the ends where navigation stops; on adds them back. Set before Set List
+// Items it makes that the only rebuild, for one carousel that shows a looping row and then a row with ends.
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FReciListSetLoopingEntriesTest, "ReciCommonUI.List.SetLoopingEntries",
+	EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool FReciListSetLoopingEntriesTest::RunTest(const FString& Parameters)
+{
+	FReciTestHarness Harness(*this);
+	if (!Harness.IsValid())
+	{
+		return false;
+	}
+	UReciCommonUISettings* Settings = GetMutableDefault<UReciCommonUISettings>();
+	Harness.Preserve(*Settings);
+	Settings->DefaultMotionScale = 0.0f;
+	UReciTestScreen* Screen = Harness.CreateScreen(TEXT("Screen"));
+	Harness.ActivateScreen(*Screen);
+	const FReciTestCarousel Rig(*Screen, true, 4);
+	UReciCarouselScrollBox* Carousel = Rig.Carousel;
+	UReciList* List = Rig.List;
+	Harness.Advance(0.5f);
+	TestEqual(TEXT("A looping item has three copies"), List->GetEntryPresentations(1).Num(), 3);
+	TestTrue(TEXT("The setting is on"), List->bLoopingEntries);
+
+	// Setting the value it has changes nothing.
+	UWidget* Hosted = List->GetHostedEntryWidget(1);
+	List->SetLoopingEntries(true);
+	TestTrue(TEXT("The same value keeps the presentations"), List->GetHostedEntryWidget(1) == Hosted);
+
+	// Off: each item once, the first centred, then the last, with no copy to continue past it.
+	List->SetLoopingEntries(false);
+	Harness.Advance(0.5f);
+	TestFalse(TEXT("The setting is off"), List->bLoopingEntries);
+	TestEqual(TEXT("The list keeps its four items"), List->GetItemCount(), 4);
+	for (int32 Index = 0; Index < 4; ++Index)
+	{
+		const TArray<UUserWidget*> Entries = List->GetEntryPresentations(Index);
+		TestEqual(FString::Printf(TEXT("Item %d is shown once"), Index), Entries.Num(), 1);
+		TestTrue(FString::Printf(TEXT("and is its hosted entry")), Entries.Num() == 1 && Entries[0] == List->GetHostedEntryWidget(Index));
+	}
+	TestEqual(TEXT("The first item is centred"), Carousel->GetCenteredItemIndex(), 0);
+	TestEqual(TEXT("Its centre is the viewport's"), Rig.GetItemCentreOffset(0), 0.0f, 0.5f);
+	const float FirstOffset = Carousel->GetScrollOffset();
+	List->SetDrivenItemIndex(3, false);
+	Harness.Advance(0.5f);
+	TestEqual(TEXT("The last item is centred"), Carousel->GetCenteredItemIndex(), 3);
+	TestEqual(TEXT("Its centre is the viewport's"), Rig.GetItemCentreOffset(3), 0.0f, 0.5f);
+	TestTrue(TEXT("The carousel scrolled forward to it"), Carousel->GetScrollOffset() > FirstOffset);
+	Harness.Advance(1.0f);
+	TestEqual(TEXT("It stays centred, with no rebase by a cycle"), Rig.GetItemCentreOffset(3), 0.0f, 0.5f);
+	List->SetDrivenItemIndex(0, false);
+	Harness.Advance(0.5f);
+	TestEqual(TEXT("From the last item the first is back, not the next copy"), Carousel->GetScrollOffset(), FirstOffset, 0.5f);
+
+	// On again: the copies return and the driven item stays centred.
+	List->SetDrivenItemIndex(2, false);
+	Harness.Advance(0.5f);
+	List->SetLoopingEntries(true);
+	Harness.Advance(0.5f);
+	TestEqual(TEXT("A looping item has three copies again"), List->GetEntryPresentations(1).Num(), 3);
+	TestEqual(TEXT("The driven item is kept"), List->GetDrivenItemIndex(), 2);
+	TestEqual(TEXT("and centred"), Carousel->GetCenteredItemIndex(), 2);
+	TestEqual(TEXT("Its centre is the viewport's"), Rig.GetItemCentreOffset(2), 0.0f, 0.5f);
+
+	// Off, then other items: three of them, shown once, the last centred when it is driven.
+	List->SetLoopingEntries(false);
+	TArray<UObject*> Items;
+	for (int32 Index = 0; Index < 3; ++Index)
+	{
+		Items.Add(NewObject<UReciTextListItemData>(List, *FString::Printf(TEXT("Mode%d"), Index)));
+	}
+	List->SetListItems(Items);
+	List->SetDrivenItemIndex(2, false);
+	Harness.Advance(0.5f);
+	TestEqual(TEXT("The new items are shown once"), List->GetEntryPresentations(2).Num(), 1);
+	TestEqual(TEXT("The last is centred"), Carousel->GetCenteredItemIndex(), 2);
+	TestEqual(TEXT("Its centre is the viewport's"), Rig.GetItemCentreOffset(2), 0.0f, 0.5f);
+	return true;
+}
+
 // A looping carousel wider than three cycles of its copies makes more once it is laid out, which replaces every entry;
 // so does Set List Items. Either way focus on the driven card lands on one of that card's new copies.
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FReciCarouselLoopRebuildFocusTest, "ReciCommonUI.Carousel.LoopRebuildFocus",

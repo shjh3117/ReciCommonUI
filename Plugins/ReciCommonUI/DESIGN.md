@@ -268,7 +268,10 @@ drive하는 screen은 쉬고 있는 list에서 이것을 끈다. Focus On Naviga
 - **Looping Entries**는 looping scroll box(carousel)가 list의 Reci Vertical Box나 Reci Horizontal
   Box를 host하는 동안에만 entry를 반복한다. 각 item은 index 하나와 selection 하나를 유지하며, 어느
   copy를 click해도 그 item이 select된다. 그 밖의 곳이나 Reci Tile Box 안에서는 각 item이 한 번만
-  보이며, 이는 보고된다.
+  보이며, 이는 보고된다. Set Looping Entries는 실행 중에 이 설정을 바꾸며, item이 있는 list는 새
+  형태로 presentation을 다시 만든다(Set Entry Widget Class와 같다). 끄면 copy가 없어져 carousel이 처음과
+  끝 item을 끝 padding으로 가운데에 놓고 navigation이 거기서 멈춘다. 같은 carousel이 반복하는 줄 다음에
+  끝이 있는 줄을 보여 줄 수 있다. Set List Items 전에 부르면 rebuild가 그것 하나다.
 - 선택하며 scroll하는 list는 scroll하면서 driven item을 바꿀 수 있다. 텍스트나 정보 scroll view는
   절대 selection을 바꾸지 않는다.
 - carousel 밖에서 Reci Advanced List의 main item이 아닌 item을 click하면 그 item이 main item이 되며,

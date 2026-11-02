@@ -35,8 +35,18 @@ public:
 	 * else (in a Reci Tile Box, or in a plain Reci Scroll Box) the list shows each item once, which is reported. Each copy
 	 * keeps its entry class's own Focus On Hover.
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="List Entries")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, BlueprintSetter = SetLoopingEntries, Category="List Entries")
 	bool bLoopingEntries = false;
+
+	/**
+	 * Changes Looping Entries at run time, so one carousel can show a looping row and later a row that stops at its ends.
+	 * A list that already has items presents them again in the new form (as Set Entry Widget Class does): looping adds
+	 * the copies, and turning it off removes them, so each item is shown once and the carousel centres its first and last
+	 * item with its end padding. Call it before Set List Items to make that the only rebuild. A list a controller
+	 * composes ignores Looping Entries, so nothing is rebuilt there.
+	 */
+	UFUNCTION(BlueprintSetter, Category="Reci Common UI|List")
+	void SetLoopingEntries(bool bInLoopingEntries);
 
 #if WITH_EDITOR
 	/**

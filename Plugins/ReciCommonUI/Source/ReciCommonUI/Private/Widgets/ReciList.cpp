@@ -78,6 +78,25 @@ void UReciList::ValidateCompiledDefaults(IWidgetCompilerLog& CompileLog) const
 }
 #endif
 
+void UReciList::SetLoopingEntries(const bool bInLoopingEntries)
+{
+	if (bLoopingEntries == bInLoopingEntries)
+	{
+		return;
+	}
+	bLoopingEntries = bInLoopingEntries;
+	// The presentations follow the setting only when they are built.
+	if (GetItemCount() > 0 && !GetListController())
+	{
+		TArray<UObject*> Items;
+		for (int32 Index = 0; Index < GetItemCount(); ++Index)
+		{
+			Items.Add(GetItemAt(Index));
+		}
+		SetListItems(Items);
+	}
+}
+
 bool UReciList::IsHostedByLoopingViewport() const
 {
 	// The viewport hosts the layout box alone, and the box hosts the list (DESIGN.md principle 7).
