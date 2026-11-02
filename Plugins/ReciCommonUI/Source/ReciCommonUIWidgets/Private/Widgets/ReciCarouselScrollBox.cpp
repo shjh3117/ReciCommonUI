@@ -8,6 +8,7 @@
 #include "Widgets/ReciListBase.h"
 #include "Widgets/ReciList.h"
 #include "Widgets/ReciListLayoutBox.h"
+#include "Widgets/Layout/SBox.h"
 #include "Widgets/SWidget.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(ReciCarouselScrollBox)
@@ -270,7 +271,11 @@ TSharedRef<SWidget> UReciCarouselScrollBox::RebuildWidget()
 	TSharedRef<SWidget> RebuiltWidget = Super::RebuildWidget();
 	LastObservedScrollOffset = GetScrollOffset();
 	NotifyHostedEntriesChanged();
-	return RebuiltWidget;
+	// UMG puts the widget's navigation rules on the Slate widget returned here. On an SScrollBox they make it paint its
+	// content in a box as long as the content, so the padding that lets the ends be centred grows to that length when
+	// painted, while the scroll range keeps the viewport's: past a few items the driven item can no longer be centred.
+	// A wrapper takes the rules instead, and applies them to navigation that leaves the scroll box as before.
+	return SNew(SBox)[RebuiltWidget];
 }
 
 void UReciCarouselScrollBox::OnSlotAdded(UPanelSlot* InSlot)

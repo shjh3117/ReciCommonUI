@@ -5,7 +5,12 @@
 ![데모의 Lists page: −와 + button이 있는 entry, outline으로 표시된 focus된 entry, 키보드 key hint](Docs/Images/demo.png)
 
 Reci Common UI는 CommonUI를 기반으로 입력을 통합하고 게임 메뉴 제작 구조를 제시하는 Unreal Engine 플러그인입니다.
+그 중심은 화면 안의 입력을 받을 곳을 다시 정하는 입력 레이어입니다.
 
+- **입력 레이어**: CommonUI에서 화면 안의 입력은 focus된 widget 하나로만 갑니다. Reci는 그 앞에 입력 레이어를 두어
+  Screen이 입력을 받을 곳을 다시 정할 수 있게 합니다. focus가 다른 곳에 있어도 list를 움직이는 key, key를 누른
+  순간에 처리해야 하는 입력, key 설정 화면의 key capture가 이 레이어로 동작합니다
+  ([SPEC.ko.md](Plugins/ReciCommonUI/SPEC.ko.md#screen-key-stock-routing으로-안-될-때만)).
 - **입력 통합**: 키보드, 게임패드, 마우스, 터치가 같은 hover, focus, selection, confirmation 규칙으로 동작합니다.
   navigation은 Enhanced Input mapping을 따르고, key hint는 지금 쓰는 장치의 key를 보여 줍니다.
 - **Composer → Screen 구조**: map마다 Composer 하나가 Stack과 UI input mapping을 맡고, Screen은 자기 화면의 표시,
@@ -27,6 +32,7 @@ flowchart LR
     Hints["Key hint"]
     Lists["focus를 받는 list entry"]
     Input["입력 통합"]
+    Layer["입력 레이어"]
   end
   Reci --> Menus["게임 메뉴"]
 ```

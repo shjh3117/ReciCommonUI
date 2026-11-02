@@ -236,6 +236,73 @@ bool FReciCarouselNavigationInputDragTest::RunTest(const FString& Parameters)
 	return true;
 }
 
+// Navigation rules set on a carousel (here Left and Right Stop, on a vertical one) neither stop it centring every item
+// of a long list nor stop applying to navigation that leaves it.
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FReciCarouselNavigationRulesTest, "ReciCommonUI.Carousel.NavigationRules",
+	EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool FReciCarouselNavigationRulesTest::RunTest(const FString& Parameters)
+{
+	FReciTestHarness Harness(*this);
+	if (!Harness.IsValid())
+	{
+		return false;
+	}
+	UReciCommonUISettings* Settings = GetMutableDefault<UReciCommonUISettings>();
+	Harness.Preserve(*Settings);
+	Settings->DefaultMotionScale = 0.0f;
+	UReciTestScreen* Screen = Harness.CreateScreen(TEXT("Screen"));
+	Harness.ActivateScreen(*Screen);
+
+	// A 60 x 200 vertical carousel of twenty 60 x 40 entries.
+	UWidgetTree& Tree = *Screen->WidgetTree;
+	USizeBox* Frame = Tree.ConstructWidget<USizeBox>(USizeBox::StaticClass(), TEXT("Frame"));
+	Frame->SetWidthOverride(60.0f);
+	Frame->SetHeightOverride(200.0f);
+	UReciCarouselScrollBox* Carousel = Tree.ConstructWidget<UReciCarouselScrollBox>(UReciCarouselScrollBox::StaticClass(), TEXT("Carousel"));
+	Carousel->SetOrientation(Orient_Vertical);
+	UReciVerticalBox* Layout = Tree.ConstructWidget<UReciVerticalBox>(UReciVerticalBox::StaticClass(), TEXT("Layout"));
+	UReciList* List = Tree.ConstructWidget<UReciList>(UReciList::StaticClass(), TEXT("Cards"));
+	List->ItemWidgetClass = UReciTestListEntry::StaticClass();
+	Layout->SetContent(List);
+	Carousel->AddChild(Layout);
+	Frame->SetContent(Carousel);
+	UOverlaySlot* FrameSlot = Screen->GetContent()->AddChildToOverlay(Frame);
+	FrameSlot->SetHorizontalAlignment(HAlign_Left);
+	FrameSlot->SetVerticalAlignment(VAlign_Top);
+	// UMG builds navigation rules into a widget's Slate widget, which exists once the carousel is on screen.
+	Carousel->SetNavigationRuleBase(EUINavigation::Left, EUINavigationRule::Stop);
+	Carousel->SetNavigationRuleBase(EUINavigation::Right, EUINavigationRule::Stop);
+	constexpr int32 ItemCount = 20;
+	TArray<UObject*> Items;
+	for (int32 Index = 0; Index < ItemCount; ++Index)
+	{
+		Items.Add(NewObject<UReciTextListItemData>(List, *FString::Printf(TEXT("Item%d"), Index)));
+	}
+	List->SetListItems(Items);
+	Harness.Advance(0.5f);
+
+	for (int32 Index = 1; Index < ItemCount; ++Index)
+	{
+		List->SetDrivenItemIndex(Index, false);
+		Harness.Advance(0.1f);
+	}
+	const FGeometry& View = Carousel->GetCachedGeometry();
+	const FGeometry& Last = List->GetHostedEntryWidget(ItemCount - 1)->GetCachedGeometry();
+	const FVector2D LastCentre = View.AbsoluteToLocal(Last.LocalToAbsolute(Last.GetLocalSize() * 0.5));
+	TestEqual(TEXT("The last item is centred"), Carousel->GetCenteredItemIndex(), ItemCount - 1);
+	TestEqual(TEXT("Its centre is the viewport's"), static_cast<float>(LastCentre.Y - View.GetLocalSize().Y * 0.5), 0.0f, 0.5f);
+
+	const FNavigationEvent Left(FModifierKeysState(), FReciTestHarness::UserIndex, EUINavigation::Left, ENavigationGenesis::Keyboard);
+	const FNavigationEvent Down(FModifierKeysState(), FReciTestHarness::UserIndex, EUINavigation::Down, ENavigationGenesis::Keyboard);
+	const TSharedRef<SWidget> CarouselWidget = Carousel->TakeWidget();
+	TestEqual(TEXT("Navigation left from the carousel stops"),
+		CarouselWidget->OnNavigation(View, Left).GetBoundaryRule(), EUINavigationRule::Stop);
+	TestEqual(TEXT("Navigation down, which has no rule, escapes"),
+		CarouselWidget->OnNavigation(View, Down).GetBoundaryRule(), EUINavigationRule::Escape);
+	return true;
+}
+
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FReciListLoopingEntriesTest, "ReciCommonUI.List.LoopingEntries",
 	EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 

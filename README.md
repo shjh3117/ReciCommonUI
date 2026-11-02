@@ -5,7 +5,12 @@ English · [한국어](README.ko.md)
 ![The demo's Lists page: entries with − and + buttons, the focused entry outlined, and key hints for the keyboard](Docs/Images/demo.png)
 
 Reci Common UI is an Unreal Engine plugin built on CommonUI that unifies input and sets out a structure for building game menus.
+At its centre is an input layer that decides again where the input inside a screen goes.
 
+- **Input layer**: in CommonUI, input inside a screen goes only to the one focused widget. Reci puts an input layer in
+  front of it so that a Screen can decide again where that input goes. Keys that drive a list while focus is elsewhere,
+  input handled at the moment a key goes down, and key capture in a key-binding screen all work through this layer
+  ([SPEC.md](Plugins/ReciCommonUI/SPEC.md#screen-keys-only-when-stock-routing-cannot-do-it)).
 - **Unified input**: keyboard, gamepad, mouse and touch follow the same hover, focus, selection and confirmation
   rules. Navigation follows Enhanced Input mappings, and key hints show the keys of the device in use.
 - **Composer → Screen structure**: one Composer per map owns the Stack and the UI input mapping; each Screen owns only
@@ -26,6 +31,7 @@ flowchart LR
     Hints["Key hints"]
     Lists["Focusable list entries"]
     Input["Unified input"]
+    Layer["Input layer"]
   end
   Reci --> Menus["Your menus"]
 ```
