@@ -343,7 +343,24 @@ void UReciScrollBox::NotifyHostedEntriesChanged()
 {
 	// The index no longer names the entry a drag in progress began on.
 	ExternalDragItemIndex = INDEX_NONE;
+	// A request to bring an item into view was made for the entries that are gone: the rebuild (Set List Items) raises
+	// one for the driven item it restores, and focus that returns to the list raises another. Dropping it would leave
+	// the new entries wherever the scroll offset is, so a screen that rebuilds a list as its selection moves would never
+	// see the selection scroll into view. The list restores its driven item before this notice, so a pending request
+	// goes on for that item, measured against the new entries.
+	const bool bFollowingItem = PendingIntoViewItemIndex != INDEX_NONE;
 	ClearPendingIntoView();
+	if (bFollowingItem)
+	{
+		const UReciListLayoutBoxBase* Layout = GetHostedLayout();
+		const UReciListBase* Source = Layout ? Layout->GetListSource() : nullptr;
+		const int32 DrivenItemIndex = Source ? Source->GetDrivenItemIndex() : INDEX_NONE;
+		if (DrivenItemIndex != INDEX_NONE && MyScrollBox.IsValid())
+		{
+			PendingIntoViewItemIndex = DrivenItemIndex;
+			RequestScrollInteractionTimer();
+		}
+	}
 	InvalidateLayoutAndVolatility();
 }
 

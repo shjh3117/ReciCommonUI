@@ -81,7 +81,7 @@ agent를 위한 문서입니다. 규칙과 그 이유는 참고 문서 [DESIGN.m
 2. **List:** **Entry Widget Class**를 지정합니다. **Selection Mode**는 [DESIGN.md, Lists](DESIGN.md#lists)의
    role에 따릅니다. action menu와 value editor는 None, 하나를 고르면 Single, 여럿을 고르면 Multi입니다.
 3. **Item:** Construct에서 item object를 만든 뒤 **Set List Items**를 호출합니다. 나중에 item이 바뀌면 object를
-   고치고 Set List Items를 다시 호출합니다. entry는 다시 만들어지고, focus는 같은 item으로 돌아옵니다.
+   고치고 Set List Items를 다시 호출합니다. entry는 다시 만들어지고, focus는 같은 item으로 돌아오며, Reci Scroll Box는 그 item을 화면 안에 둡니다.
 4. **key로 value 바꾸기:** Left와 Right는 **On Navigation Input**에서 처리합니다(Switch on
    EReciNavigationDirection). 대상은 Get Hosted Entry Button(Get Driven Item Index)입니다. list 자신의 axis는
    연결하지 않습니다.

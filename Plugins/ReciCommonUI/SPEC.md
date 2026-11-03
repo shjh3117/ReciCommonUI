@@ -80,7 +80,8 @@ Build every UI in four layers. References point down only; a lower layer asks up
 2. **List:** set **Entry Widget Class**. Set **Selection Mode** by role, from [DESIGN.md, Lists](DESIGN.md#lists):
    None for action menus and value editors, Single for one choice, Multi for a set.
 3. **Items:** in Construct, build the item objects, then call **Set List Items**. To change items later, edit the
-   objects and call Set List Items again. Entries are rebuilt, and focus returns to the same item.
+   objects and call Set List Items again. Entries are rebuilt, focus returns to the same item, and a Reci Scroll Box
+   keeps that item in view.
 4. **Value changes from keys:** handle Left and Right in **On Navigation Input** (Switch on EReciNavigationDirection).
    Act on Get Hosted Entry Button (Get Driven Item Index). Leave the list's own axis unconnected.
 

@@ -260,7 +260,9 @@ drive하는 screen은 쉬고 있는 list에서 이것을 끈다. Focus On Naviga
   첫 번째 enabled entry로 가고, 그런 entry가 없으면 focusable한 list 자신으로 가며, 그렇지 않으면
   그대로 있다. 다른 곳의 focus는 그대로 있고, 나중에 list로 돌아오면 rebuild가 없었던 것처럼 driven item에
   도달한다. two-level list의 list에서는 two-level list가 rebuild 뒤 focus를 focused parent의 row로
-  되돌린다.
+  되돌린다. Reci Scroll Box는 rebuild 전에 driven item을 화면 안으로 옮기던 중이었으면, rebuild 뒤에도 새
+  entry에서 같은 일을 이어 간다(복원된 driven item 기준). selection이 움직일 때마다 list를 다시 만드는
+  screen에서도 selection이 화면 밖에 남지 않는다.
 - **Hold**: list는 Reci preprocessor에서 key-down 시점에 Accept를 받고 Reci Scroll Box는 entry
   click을 스스로 인식하므로, 둘 다 CommonUI의 hold 없이 confirm한다. hold를 요구하는 entry는
   보고된다. Common Activatable Widget에서 파생된 entry class도 보고된다(Reci는 widget에서 가장
